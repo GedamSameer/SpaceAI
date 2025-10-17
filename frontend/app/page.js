@@ -36,6 +36,18 @@ const GET_EMPLOYEES_BY_DEPARTMENT = gql`
   }
 `;
 
+const ADD_EMPLOYEE = gql`
+  mutation AddEmployee($input: EmployeeInput!) {
+    addEmployee(input: $input) {
+      id
+      name
+      position
+      department
+      salary
+    }
+  }
+`;
+
 export default function HomePage() {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
@@ -175,22 +187,23 @@ function AddEmployeeForm({ onClose }) {
   });
   const [errors, setErrors] = useState({});
 
-  const ADD_EMPLOYEE = gql`
-    mutation AddEmployee($input: EmployeeInput!) {
-      addEmployee(input: $input) {
-        id
-        name
-        position
-        department
-        salary
-      }
-    }
-  `;
-
   const [addEmployee, { loading, error }] = useMutation(ADD_EMPLOYEE, {
-    refetchQueries: ['GetAllEmployees', 'GetEmployeesByDepartment'],
+    refetchQueries: [
+      'GetAllEmployees',
+      {
+        query: GET_EMPLOYEES_BY_DEPARTMENT,
+        variables: { department: formData.department },
+      },
+    ],
     onCompleted: () => {
       onClose();
+      // Reset form
+      setFormData({
+        name: '',
+        position: '',
+        department: '',
+        salary: ''
+      });
     }
   });
 

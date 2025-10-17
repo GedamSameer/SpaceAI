@@ -21,7 +21,7 @@ const startServer = async () => {
       listen: { port: process.env.PORT || 4000 },
     });
 
-    console.log(`🚀 Server ready at ${url}`);
+    console.log(`Server is running at ${url}`);
   } catch (error) {
     console.error('Failed to start server:', error);
   }
