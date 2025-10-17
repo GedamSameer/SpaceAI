@@ -1,21 +1,10 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { gql } from '@apollo/client';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-
-const GET_EMPLOYEE_DETAILS = gql`
-  query GetEmployeeDetails($id: ID!) {
-    getEmployeeDetails(id: $id) {
-      id
-      name
-      position
-      department
-      salary
-    }
-  }
-`;
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { GET_EMPLOYEE_DETAILS } from '../../lib/graphql';
 
 export default function EmployeeDetailPage() {
   const params = useParams();
@@ -29,10 +18,7 @@ export default function EmployeeDetailPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading employee details...</p>
-        </div>
+        <LoadingSpinner message="Loading employee details..." />
       </div>
     );
   }
